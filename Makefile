@@ -1,4 +1,4 @@
-GCC = $(GCC) -std=gnu++11
+GCC = g++ -std=gnu++11
 
 default: sorting
 
