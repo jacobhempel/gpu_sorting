@@ -78,6 +78,8 @@ void serial_quicksort(vector<int>& vec) {
 }
 
 void parallel_quicksort(vector<int>& vec) {
+    cout << "NUM_THREADS = " << NUM_THREADS << endl;
+    cout << "MAX RECURSION DEPTH = " << MAX_DEPTH << endl;
     parallel_quicksort_worker(vec, 0, vec.size() - 1, 1);
 }
 
