@@ -16,7 +16,7 @@ using std::thread;
 using std::cout;
 using std::endl;
 
-const int MAX_DEPTH = floor(log2(NUM_THREADS));
+const int MAX_DEPTH = ceil(log2(NUM_THREADS));
 
 void serial_quicksort_worker(vector<int>& vec, int low, int high) {
     if (low < high) {

@@ -105,7 +105,7 @@ int main(int argc, char const *argv[]) {
     srand(time(NULL));
     vector<int> vec;
 
-    const int VEC_SIZE = 10000000;
+    const int VEC_SIZE = 100000000;
 
     for (int i = 0; i < VEC_SIZE; i++) {
         vec.push_back(i);
@@ -116,8 +116,8 @@ int main(int argc, char const *argv[]) {
     // do_parallel_odd_even_sort(vec);
     // do_serial_bubble_sort(vec);
 
-    do_serial_shell_sort(vec);
-    do_parallel_shell_sort(vec);
+    // do_serial_shell_sort(vec);
+    // do_parallel_shell_sort(vec);
 
     do_serial_quick_sort(vec);
     do_parallel_quick_sort(vec);
