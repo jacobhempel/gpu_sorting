@@ -43,4 +43,14 @@ void print_vec(vector<int> vec) {
     cout << endl;
 }
 
+int* as_heap_array(vector<int>& vec, int* array) {
+    array = new int[vec.size()];
+
+    for (int i = 0; i < vec.size(); i++) {
+        arr[i] = vec[i];
+    }
+
+    return vec.size;
+}
+
 #endif  // UTIL_CPP
