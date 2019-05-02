@@ -49,7 +49,7 @@ void do_GPU_parallel_odd_even_sort(vector<int> vec) {
     int* array;
     int size = as_heap_array(vec, array);
     auto t1 = std::chrono::high_resolution_clock::now();
-    GPU_odd_even_sort(vec);
+    GPU_odd_even_sort(array, size);
     auto t2 = std::chrono::high_resolution_clock::now();
     if (is_sorted(vec)) {
         std::cout << "PARALLEL - odd-even sort => "
