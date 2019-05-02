@@ -5,6 +5,7 @@
 #include <vector>
 #include <thread>
 #include <cstdlib>
+#include <cmath>
 
 using std::vector;
 using std::thread;
@@ -12,6 +13,7 @@ using std::cout;
 using std::endl;
 
 const int NUM_THREADS = thread::hardware_concurrency();
+const int MAX_DEPTH = ceil(log2(NUM_THREADS));
 
 void swap(vector<int>& vec, int& a, int b) {
     int temp = vec[a];

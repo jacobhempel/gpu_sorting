@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <unistd.h>
 #include <cmath>
+#include <cstdlib>
 
 #include "util.cpp"
 #include "shell_sort.cpp"
@@ -16,7 +17,6 @@ using std::thread;
 using std::cout;
 using std::endl;
 
-const int MAX_DEPTH = ceil(log2(NUM_THREADS));
 
 void serial_quicksort_worker(vector<int>& vec, int low, int high) {
     if (low < high) {
@@ -41,6 +41,7 @@ void serial_quicksort_worker(vector<int>& vec, int low, int high) {
 }
 
 void parallel_quicksort_worker(vector<int>& vec, int low, int high, int depth) {
+    // cout << "entered parallel worker with depth = " << depth << endl;
     if (low < high) {
         int pivot = vec[high];
         int i = (low - 1);
@@ -57,7 +58,7 @@ void parallel_quicksort_worker(vector<int>& vec, int low, int high, int depth) {
         int part_neg = part - 1;
         int part_pos = part + 1;
 
-        if (depth <= MAX_DEPTH) {
+        if (depth < MAX_DEPTH) {
             thread t1([low, part_neg, depth, &vec]() {
                 parallel_quicksort_worker(vec, low, part_neg, depth + 1);
             });
@@ -78,9 +79,7 @@ void serial_quicksort(vector<int>& vec) {
 }
 
 void parallel_quicksort(vector<int>& vec) {
-    cout << "NUM_THREADS = " << NUM_THREADS << endl;
-    cout << "MAX RECURSION DEPTH = " << MAX_DEPTH << endl;
-    parallel_quicksort_worker(vec, 0, vec.size() - 1, 1);
+    parallel_quicksort_worker(vec, 0, vec.size() - 1, 0);
 }
 
 
