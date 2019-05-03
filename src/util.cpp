@@ -30,6 +30,15 @@ bool is_sorted(vector<int> vec) {
     return true;
 }
 
+bool is_sorted(int* array, int size) {
+    for (int i = 0; i < size - 1; i++) {
+        if (array[i] > array[i+1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void shuffle(vector<int>& vec) {
     for (int i = 0; i < vec.size(); i++) {
         swap(vec, i, rand() % vec.size());

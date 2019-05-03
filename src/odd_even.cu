@@ -1,6 +1,9 @@
 #ifndef ODD_EVEN_CU
 #define ODD_EVEN_CU
 
+#include "util.h"
+#include "gpu_sorts.h"
+
 __global__ void GPU_odd_even_kernel(int* vec, int size, int* done) {
     int tid = threadIdx.x + blockIdx.x * blockDim.x;
     int og_tid = tid;
@@ -57,11 +60,15 @@ __global__ void GPU_odd_even_kernel(int* vec, int size, int* done) {
 
 void GPU_odd_even_sort(int* vec, int size) {
     int* deviceVec;
+    int* done;
+    int zero = 0;
     H_ERR(cudaMalloc((void**) &deviceVec, sizeof(int) * size));
+    H_ERR(cudaMalloc((void**) &done, sizeof(int)));
 
     H_ERR(cudaMemcpy(deviceVec, vec, sizeof(int) * size, cudaMemcpyHostToDevice));
+    H_ERR(cudaMemcpy(done, &zero, sizeof(int), cudaMemcpyHostToDevice));
 
-    GPU_odd_even_kernel <<<128, 128>>> (deviceVec, size);
+    GPU_odd_even_kernel <<<128, 128>>> (deviceVec, size, done);
 
     H_ERR( cudaDeviceSynchronize());
 

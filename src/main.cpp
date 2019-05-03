@@ -10,7 +10,6 @@
 #include "shell_sort.cpp"
 #include "quick_sort.cpp"
 #include "sample_sort.cpp"
-#include "odd_even.cu"
 
 using std::vector;
 using std::thread;
@@ -43,22 +42,6 @@ void do_parallel_odd_even_sort(vector<int> vec) {
     } else {
         cout << "ODD-EVEN SORT FAILED TO PRODUCE A SORTED LIST" << endl;
     }
-}
-
-void do_GPU_parallel_odd_even_sort(vector<int> vec) {
-    int* array;
-    int size = as_heap_array(vec, array);
-    auto t1 = std::chrono::high_resolution_clock::now();
-    GPU_odd_even_sort(array, size);
-    auto t2 = std::chrono::high_resolution_clock::now();
-    if (is_sorted(vec)) {
-        std::cout << "PARALLEL - odd-even sort => "
-                  << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
-                  << " milliseconds\n";
-    } else {
-        cout << "GPU ODD-EVEN SORT FAILED TO PRODUCE A SORTED LIST" << endl;
-    }
-    delete array;
 }
 
 void do_serial_shell_sort(vector<int> vec) {
@@ -133,7 +116,7 @@ int main(int argc, char const *argv[]) {
     srand(time(NULL));
     vector<int> vec;
 
-    const int VEC_SIZE = 10000000;
+    const int VEC_SIZE = 1000000;
 
     for (int i = 0; i < VEC_SIZE; i++) {
         vec.push_back(i);
@@ -149,13 +132,14 @@ int main(int argc, char const *argv[]) {
         // do_serial_bubble_sort(vec);
         // do_parallel_odd_even_sort(vec);
 
-        do_serial_shell_sort(vec);
-        do_parallel_shell_sort(vec);
+        // do_serial_shell_sort(vec);
+        // do_parallel_shell_sort(vec);
 
         do_serial_quick_sort(vec);
         do_parallel_quick_sort(vec);
 
         do_sample_sort(vec);
+
 
         cout << "------------------------------------------------------------------------------" << endl;
     }
