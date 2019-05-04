@@ -17,6 +17,12 @@ using std::thread;
 using std::cout;
 using std::end;
 
+struct bucket_compare {
+    inline bool operator() (const vector<int>& vec1, const vector<int>& vec2) {
+        return vec1[0] < vec2[0];
+    }
+};
+
 void sample_sort_worker(const vector<int>& vec, vector<int>& bucket, int left, int right) {
 
     for (int i = 0; i < vec.size(); i++) {
@@ -31,14 +37,18 @@ void sample_sort_worker(const vector<int>& vec, vector<int>& bucket, int left, i
 vector<int> sample(const vector<int>& vec) {
     vector<int> samples;
     vector<int> returns;
+
+    int interval = 32;
     // cout << "doing some sampling!" << endl;
-    for (int i = 0; i < NUM_THREADS * 4; i++) {
+    for (int i = 0; i < NUM_THREADS * interval; i++) {
         samples.push_back(vec[rand() % vec.size()]);
     }
-    serial_quicksort(samples);
-    for (int i = 1; i < NUM_THREADS; i++) {
-        returns.push_back(samples[i * NUM_THREADS]);
+    std::sort(samples.begin(), samples.end());
+    for (int i = interval; i < samples.size(); i += interval) {
+        returns.push_back(samples[i]);
     }
+
+    std::sort(returns.begin(), returns.end());
     // cout << "done sampling!!" << endl;
     return returns;
 }
@@ -48,6 +58,11 @@ void sample_sort(vector<int>& vec) {
     vector<vector<int>> buckets;
 
     auto splitters = sample(vec);
+
+    vector<int> empty;
+    for (int i = 0; i < NUM_THREADS; i++) {
+        buckets.push_back(empty);
+    } 
 
     int left = 0;
     int right = 0;
@@ -59,11 +74,10 @@ void sample_sort(vector<int>& vec) {
              right = 210000000;
         }
 
-        workers.push_back(thread([left, right, &buckets, &vec]() {
-            vector<int> bucket;
-            bucket.reserve(vec.size() / NUM_THREADS);
-            sample_sort_worker(vec, bucket, left, right);
-            buckets.push_back(bucket);
+        workers.push_back(thread([left, right, i, &buckets, &vec]() {
+            // vector<int> bucket;
+            sample_sort_worker(vec, buckets[i], left, right);
+            // buckets.push_back(bucket);
         }));
 
         left = right;
@@ -75,23 +89,7 @@ void sample_sort(vector<int>& vec) {
 
     // cout << "Just need to sort the buckets now!" << endl;
 
-    bool done = false;
-
-    while(!done) {
-        done = true;
-
-        for (int i = 0; i < buckets.size() - 1; i++) {
-            if (buckets[i][0] > buckets[i+1][0]) {
-                auto temp = buckets[i];
-                buckets[i] = buckets[i + 1];
-                buckets[i + 1] = temp;
-                done = false;
-            }
-        }
-
-    }
-
-    // cout << "Just need to concat now!" << endl;
+    std::sort(buckets.begin(), buckets.end(), bucket_compare());
 
     vector<int> sorted;
     for (auto bucket: buckets) {

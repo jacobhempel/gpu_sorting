@@ -27,4 +27,4 @@ src/util.o: src/util.cpp
 	$(GCC) -c src/util.cpp -o src/util.o 
 
 clean:
-	rm src/*.o sorting
+	rm src/*.o cpu-sorting

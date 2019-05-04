@@ -16,7 +16,6 @@ using std::thread;
 using std::cout;
 using std::endl;
 
-
 // HELPER FUNCTIONS TO RUN SORTS
 void do_serial_bubble_sort(vector<int> vec) {
     cout << "SERIAL   - bubble sort   => ";
@@ -109,14 +108,24 @@ void do_sample_sort(vector<int> vec) {
     }
 }
 
-
-
+void do_std_sort(vector<int> vec) {
+    auto t1 = std::chrono::high_resolution_clock::now();
+    std::sort(vec.begin(), vec.end());
+    auto t2 = std::chrono::high_resolution_clock::now();
+    if (is_sorted(vec)) {
+        std::cout << "C++ - standard sort      => "
+                  << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
+                  << " milliseconds\n";
+    } else {
+        cout << "SAMPLE SORT FAILED TO PRODUCE A SORTED LIST" << endl;
+    }
+}
 
 int main(int argc, char const *argv[]) {
     srand(time(NULL));
     vector<int> vec;
 
-    const int VEC_SIZE = 1000000;
+    const int VEC_SIZE = 20000;
 
     for (int i = 0; i < VEC_SIZE; i++) {
         vec.push_back(i);
@@ -129,16 +138,18 @@ int main(int argc, char const *argv[]) {
 
     for (int i = 0; i < 5; i++) {
         shuffle(vec);
-        // do_serial_bubble_sort(vec);
-        // do_parallel_odd_even_sort(vec);
+        do_serial_bubble_sort(vec);
+        do_parallel_odd_even_sort(vec);
 
         // do_serial_shell_sort(vec);
         // do_parallel_shell_sort(vec);
 
-        do_serial_quick_sort(vec);
-        do_parallel_quick_sort(vec);
+        // do_serial_quick_sort(vec);
+        // do_parallel_quick_sort(vec);
 
-        do_sample_sort(vec);
+        // do_sample_sort(vec);
+
+        // do_std_sort(vec);
 
 
         cout << "------------------------------------------------------------------------------" << endl;

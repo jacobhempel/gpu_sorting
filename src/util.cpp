@@ -12,7 +12,7 @@ using std::thread;
 using std::cout;
 using std::endl;
 
-const int NUM_THREADS = thread::hardware_concurrency();
+const int NUM_THREADS = std::thread::hardware_concurrency();
 const int MAX_DEPTH = ceil(log2(NUM_THREADS));
 
 void swap(vector<int>& vec, int& a, int b) {
@@ -50,16 +50,6 @@ void print_vec(vector<int> vec) {
         cout << vec[i] << ", ";
     }
     cout << endl;
-}
-
-int as_heap_array(vector<int>& vec, int* array) {
-    array = new int[vec.size()];
-
-    for (int i = 0; i < vec.size(); i++) {
-        array[i] = vec[i];
-    }
-
-    return vec.size();
 }
 
 #endif  // UTIL_CPP
