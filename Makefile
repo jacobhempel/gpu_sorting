@@ -1,9 +1,12 @@
 GCC = g++ -std=c++11 -pthread 
 
-default: cpu-sorting
+default: cpu-sorting gpu-sorting
 
-run: cpu-sorting
-	./cpu-sorting
+run: cpu-sorting gpu-sorting
+	./gpu-sorting
+
+gpu-sorting: src/gpu_sorts.cu
+	nvcc -O2 -g -o gpu-sorting src/gpu_sorts.cu
 
 cpu-sorting: src/main.o
 	$(GCC) -o cpu-sorting src/main.o    
